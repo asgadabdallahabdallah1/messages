@@ -11,15 +11,15 @@ import {
   View,
   TextInput
 } from "react-native";
-
+import firebase from "@firebase/app";
+import 'firebase/auth'
 import { MonoText } from "../components/StyledText";
-//import firebase from "@firebase/app";
 import db from '../db'
+import 'firebase/auth'
 //import "@firebase/firestore";
 
 export default function HomeScreen() {
   const [messages, setMessages] = useState([]);
-  const [from, setFrom] = React.useState('');
   const [to, setTo] = React.useState('');
   const [text, setText] = React.useState('');
   const [id, setId] = React.useState('');
@@ -39,20 +39,19 @@ export default function HomeScreen() {
   };
 
   const handleSend = () => {
+    const from =firebase.auth().currentUser.uid
     if(id){
       db.collection("messages").doc(id).update({from,to,text})
     }
     else{
       db.collection("messages").add({from,to,text})
     }
-    setFrom("")
     setTo("")
     setText("")
     setId("")
   };
 
  handleUpdate = message =>{
-   setFrom(message.from)
    setTo(message.to)
    setText(message.text)
    setId(message.id)
@@ -68,7 +67,7 @@ export default function HomeScreen() {
         {messages.map((message, i) => (
           <View style={styles.getStartedText} key={i}>
             <Text>
-              {message.id} - {message.from}-{message.to}-{message.text}
+              {message.from} - {message.to}-{message.text}
             </Text>
             <Button title="Delete" onPress={() => handleDelete(message)}></Button>
             <Button title="Update" onPress={() => handleUpdate(message)}></Button>
@@ -76,12 +75,7 @@ export default function HomeScreen() {
         ))}
       </ScrollView>
 
-      <TextInput
-      style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-      onChangeText={setFrom}
-      placeholder ="From"
-      value={from}
-    />
+     
     <TextInput
       style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
       onChangeText={setTo}
