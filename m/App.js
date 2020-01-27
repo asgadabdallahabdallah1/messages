@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import firebase from "@firebase/app";
-import "firebase/auth";
+import 'firebase/auth'
 import AppNavigator from "./navigation/AppNavigator";
 import db from "./db";
 
@@ -22,22 +22,16 @@ export default function App(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  useEffect(() => {
-    return firebase.auth().onAuthStateChanged(setUser);
-  }, []);
+  useEffect(()=>{
+   return firebase.auth().onAuthStateChanged(setUser);
+  },[])
 
-  const handleRegister = async () => {
-    await firebase.auth().createUserWithEmailAndPassword(email, password);
-    db.collection("users")
-      .doc(firebase.auth().currentUser.uid)
-      .add({
-        displayName: email,
-        photoURL:
-          "https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png"
-      });
+  const handleRegister = async() => {
+    await firebase.auth().createUserWithEmailAndPassword(email, password)
+    db.collection('users').doc(firebase.auth().currentUser.uid).add({displayName:"",photoURL:""})
   };
   const handleLogin = () => {
-    firebase.auth().signInWithEmailAndPassword(email, password);
+    firebase.auth().signInWithEmailAndPassword(email, password)
   };
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
@@ -71,7 +65,7 @@ export default function App(props) {
       </View>
     );
   } else {
-    console.log("user", user);
+    console.log('user', user)
     return (
       <View style={styles.container}>
         {Platform.OS === "ios" && <StatusBar barStyle="default" />}

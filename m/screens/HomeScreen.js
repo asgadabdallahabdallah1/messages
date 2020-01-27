@@ -16,7 +16,7 @@ import "firebase/auth";
 import { MonoText } from "../components/StyledText";
 import db from "../db";
 import "firebase/auth";
-import Message from "./Message";
+import Message from "./Message"
 //import "@firebase/firestore";
 
 export default function HomeScreen() {
@@ -61,7 +61,7 @@ export default function HomeScreen() {
     setId(message.id);
   };
   const handleLogout = () => {
-    firebase.auth().signOut();
+    firebase.auth().signOut()
   };
   return (
     <View style={styles.container}>
@@ -71,7 +71,7 @@ export default function HomeScreen() {
         keyboardShouldPersistTaps="always"
       >
         {messages.map((message, i) => (
-          <Message key={i} message={message} handleUpdate={handleUpdate} />
+            <Message key={i} message={message} handleUpdate={handleUpdate}/>
         ))}
       </ScrollView>
 

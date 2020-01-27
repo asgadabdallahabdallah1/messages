@@ -1,31 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TextInput, Button, Image } from "react-native";
+import { StyleSheet, View, Text, TextInput, Button } from "react-native";
 import firebase from "@firebase/app";
 import "firebase/auth";
 import db from "../db";
 import { messaging } from "firebase";
-import * as ImagePicker from "expo-image-picker";
 
 export default function SettingsScreen() {
-  const [hasCameraRollPermission, setHasCameraRollPermission] = useState(false);
   const [displayName, setDisplayName] = useState("");
   const [photoURL, setPhotoURL] = useState("");
 
-  const askPermission = async () => {
-    const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
-    setHasCameraRollPermission(status === "granted");
-  };
-  useEffect(() => {
-    askPermission();
-  }, []);
-
   const handleSet = async () => {
-    const snap = await db
+    const info = await db
       .collection("users")
-      .doc(firebase.auth().currentUser.uid)
-      .get();
-    setDisplayName(snap.data().displayName);
-    setPhotoURL(snap.data().photoURL);
+      .doc(firebaseauth)
+      .get(snapshot => {
+        console.log();
+      });
+    setDisplayName(info.displayName);
+    setPhotoURL(info.photoURL);
   };
   useEffect(() => {
     // setDisplayName(firebase.auth().currentUser.displayName);
@@ -37,28 +29,14 @@ export default function SettingsScreen() {
     // firebase.auth().currentUser.updateProfile({
     //   displayName,
     //   photoURL
-    // });
-    db.collection("users")
-      .doc(firebase.auth().currentUser.uid)
-      .set({ displayName: "", photoURL: "" });
-    // handleSet()
+    Aqa / // });
+      db
+        .collection("users")
+        .doc(firebase.auth().currentUser.uid)
+        .update({ displayName: "", photoURL: "" });
   };
-
-  const handlePickImage = () => {
-    //show camera roll, setURL
-    // use firebase storage
-    //upload selected image to default bucker, naming with uid
-    //get url and setphotoURL
-  };
-
   return (
     <View style={styles.container}>
-      {photoURL !== "" && (
-        <Image
-          style={{ width: 50, height: 50 }}
-          source={{ uri: photoURL }}
-        ></Image>
-      )}
       <TextInput
         style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
         onChangeText={setDisplayName}
@@ -71,9 +49,7 @@ export default function SettingsScreen() {
         placeholder="Photo URL"
         value={photoURL}
       />
-
-      <Button title="Pick Image" onPress={handlePickImage}></Button>
-      <Button title="Save" onPress={handleSave}></Button>
+      <Button title="Save" onPress={() => handleSave()}></Button>
     </View>
   );
 }
